@@ -20,11 +20,13 @@ class ldap {
 	public function __construct($host, $ldapUsername = null, $ldapPassword = null) {
 		$this->connection = ldap_connect($host);
 
+		// Following options need to be set when working with Active Directory
 		ldap_set_option($this->connection, LDAP_OPT_REFERRALS, 0);
 		ldap_set_option($this->connection, LDAP_OPT_PROTOCOL_VERSION, 3);
 
 		$this->bind = ldap_bind($this->connection, $ldapUsername, $ldapPassword);
 
+		// Get the root baseDN
 		$this->baseDN = $this->findBaseDN();
 	}
 
@@ -59,7 +61,7 @@ class ldap {
 	 * Get user object information
 	 *
 	 * @param	string	$username	Username (sAMAccountName) to search for
-	 * @param	string	$baseDN		Base to search from.  If not baseDN is passed then the root baseDN will be used
+	 * @param	string	$baseDN		Base to search from.  If baseDN is not passed, the root baseDN will be used
 	 * @param	array	$attributes	Attributes to return.  By default all attributes will be returned
 	 * @return	array	Requested attributes
 	 */
